@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script type="module">
+        // Importer les fonctions nécessaires depuis le SDK Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore.js";
+    
+        // Configuration Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyAkawm4d2kj5gvljsLgU30iAkpQojc83vI",
+            authDomain: "businesshope-39b64.firebaseapp.com",
+            projectId: "businesshope-39b64",
+            storageBucket: "businesshope-39b64.firebasestorage.app",
+            messagingSenderId: "792197504918",
+            appId: "1:792197504918:web:845ade1022005532b907b7"
+        };
+    
+        // Initialisation de Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app); // Initialiser Firestore
+    
+        // 🔹 Fonction pour ajouter une voiture
+        async function ajouterVoiture(voiture) {
+            try {
+                await addDoc(collection(db, "voitures"), voiture);
+                console.log("Voiture ajoutée avec succès !");
+            } catch (error) {
+                console.error("Erreur d'ajout :", error);
+            }
+        }
+    
+        // 🔹 Fonction pour récupérer les voitures
+        async function lireVoitures() {
+            try {
+                const querySnapshot = await getDocs(collection(db, "voitures"));
+                querySnapshot.forEach((doc) => {
+                    console.log("Voiture trouvée :", doc.id, doc.data());
+                });
+            } catch (error) {
+                console.error("Erreur de lecture :", error);
+            }
+        }
+    
+        // 🔹 Fonction pour supprimer une voiture par son ID
+        async function supprimerVoiture(id) {
+            try {
+                await deleteDoc(doc(db, "voitures", id));
+                console.log("Voiture supprimée !");
+            } catch (error) {
+                console.error("Erreur de suppression :", error);
+            }
+        }
+    
+        // Exemple d'ajout d'une voiture
+        const voiture1 = {
+            reference: "REF202401",
+            codeModele: "TOY-BELTE-2020",
+            marque: "Toyota",
+            modele: "Mazeratti",
+            annee: 2020,
+            cylindree: 1500,
+            pilotage: "Automatique",
+            transmission: "2WD",
+            couleur: "Blanc",
+            places: 5,
+            portes: 4,
+            carburant: "Essence",
+            kilometrage: 25000,
+            prix: 18000,
+            images: ["assets/images/vehicules/belta.png"],
+            equipements: ["Climatisation", "Bluetooth", "Caméra de recul"],
+            historique: { proprietairesPrecedents: 1, accidents: 0, reparations: "Aucune" },
+            localisation: "Kinshasa, RDC"
+        };
+    
+        // Ajouter un véhicule (décommente pour tester)
+        // ajouterVoiture(voiture1);
+    
+        // Lire les véhicules (décommente pour tester)
+        // lireVoitures();
+    
+    </script>
+    
+</head>
+<body>
+    <p><br><br><br><br><br><br><br><br><br><br><br>                   Bonjour tout le monde</p>
+
+
+
+</body>
+</html>

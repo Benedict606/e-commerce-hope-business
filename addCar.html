@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hope Business World</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link href="assets/images/main/logo.png" rel="icon">
+    <style>
+        *{
+            font-family:"Poppins", sans-serif;
+        }
+    </style>
+    <link href="./output.css" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
+
+
+    
+    <script>
+        // Fonction pour ajouter dynamiquement un champ d'équipement
+        function addEquipmentField() {
+            const container = document.getElementById('equipment-container');
+            const newField = document.createElement('div');
+            newField.classList.add('flex', 'items-center', 'mb-4');
+            newField.innerHTML = `
+                <input type="text" name="equipement[]" class="p-2 border border-gray-300 rounded-md mr-2 w-full" placeholder="Nom de l'équipement">
+                <button type="button" class="bg-red-500 text-white px-4 py-2 rounded-md" onclick="removeField(this)">Supprimer</button>
+            `;
+            container.appendChild(newField);
+        }
+
+        // Fonction pour supprimer un champ d'équipement
+        function removeField(button) {
+            const field = button.parentElement;
+            field.remove();
+        }
+
+        // Fonction pour ajouter des images
+        function addImageField() {
+            const container = document.getElementById('image-container');
+            const newField = document.createElement('div');
+            newField.classList.add('my-4');
+            newField.innerHTML = `
+                <input type="file" name="images[]" accept="image/*" class="p-2 border border-gray-300 rounded-md w-full">
+            `;
+            container.appendChild(newField);
+        }
+
+        // Fonction pour soumettre le formulaire
+        // Fonction pour soumettre le formulaire
+function submitForm(event) {
+    event.preventDefault();
+
+    const formData = new FormData(document.getElementById('car-form'));
+    const data = {};
+    imagesC = []
+
+    formData.forEach((value, key) => {
+        // Si le champ est "images[]", on doit s'assurer de collecter les fichiers
+        if (key === "images[]") {
+    
+            
+            // let imageFiles = [];
+            // // Pour chaque fichier dans "images[]", on ajoute l'objet file à un tableau
+            // for (let i = 0; i < value.length; i++) {
+            //     imageFiles.push(value[i].name); // Ajoute le nom du fichier, vous pouvez aussi ajouter d'autres propriétés si besoin
+            // }
+            // data[key] = imageFiles;  // Ajout du tableau d'images dans le JSON
+            imagesC.push(value.name);
+        } else {
+            // Pour les autres champs, on les ajoute normalement au tableau
+          
+            if (!data[key]) {
+                data[key] = [];
+            }
+            data[key].push(value);
+        }
+    });
+    data["images[]"]=imagesC;
+
+    // Affiche les données sous format JSON
+    console.log(JSON.stringify(data, null, 2));
+    alert('Formulaire soumis, données JSON dans la console.', data);
+    location.reload();
+}
+
+    </script>
+</head>
+
+<body class="max-w-7xl m-auto">
+
+    <header class="bg-white fixed top-0 max-w-7xl m-auto  w-full flex flex-col  h-34 lg:h-20 items-center border-b-2 border-gray-200 mb-4  z-10">
+        <div class="flex justify-between items-center w-full">
+            <a href="index.html">
+            <img class="h-18 pl-5 lg:pl-0" src="/assets/images/main/logo.png" alt="">
+            </a>
+            <div class="hidden lg:block">
+                <p id="titreDetails" class="text-4xl ">
+                        HOPE BUSINESS WORLD LTD
+                </p>
+            </div>
+            <div class="flex gap-6 pr-5 lg:pr-0">
+                
+                <a href="">
+                    <div class="flex flex-col items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-in text-blue-900 size-8"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" x2="3" y1="12" y2="12"/></svg>
+                    <p class="text-gray-600">Log out</p>
+              
+                </div></a>
+                
+                <a href="">
+                    <div class="flex flex-col items-center justify-center">
+                    
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-user text-blue-900 size-8"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="10" r="3"/><path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662"/></svg>
+                        <p class="text-gray-600">name</p>
+                    
+                </div></a>
+                
+                <button id="menu-button" class="block lg:hidden" >
+                    <div class="flex flex-col items-center justify-center mr-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-align-justify text-blue-900 size-8"><path d="M3 12h18"/><path d="M3 18h18"/><path d="M3 6h18"/></svg>
+                    <p class="text-gray-600">Menu</p>
+                </div>
+                </button>
+
+                
+            </div>
+        
+    </header>
+
+    <!-- Main content -->
+    <main class="container mx-auto p-8 mt-20">
+        <h1 class="text-3xl text-center my-10">Ajouter une Voiture</h1>
+        <form id="car-form" class="text-xl" onsubmit="submitForm(event)">
+            <!-- Référence -->
+            <div class="flex flex-col lg:flex-row lg:gap-10">
+                <div class="mb-4 flex-1">
+                    <label for="reference" class="block  text-xl">Référence</label>
+                    <input type="text" id="reference" name="reference" class="p-2 border border-gray-300 rounded-md w-full" placeholder="Référence unique de la voiture" required>
+                </div>
+    
+                <!-- Code Modèle -->
+                <div class="mb-4 flex-1">
+                    <label for="codeModele" class="block  text-xl">Code Modèle</label>
+                    <input type="text" id="codeModele" name="codeModele" class="p-2 border border-gray-300 rounded-md w-full" placeholder="Code du modèle" required>
+                </div>
+             </div>
+
+             <div class="flex flex-col lg:flex-row lg:gap-10">
+                <!-- Marque -->
+                <div class="mb-4 flex-1">
+                    <label for="marque" class="block  text-xl">Marque</label>
+                    <input type="text" id="marque" name="marque" class="p-2 border border-gray-300 rounded-md w-full" placeholder="Marque de la voiture" required>
+                </div>
+
+                <!-- Modèle -->
+                <div class="mb-4 flex-1">
+                    <label for="modele" class="block  text-xl">Modèle</label>
+                    <input type="text" id="modele" name="modele" class="p-2 border border-gray-300 rounded-md w-full" placeholder="Modèle de la voiture" required>
+                </div>
+             </div>
+
+
+             <div class="flex flex-col lg:flex-row lg:gap-10">
+                <!-- Année -->
+                <div class="mb-4 flex-1">
+                    <label for="annee" class="block  text-xl">Année</label>
+                    <input type="number" id="annee" name="annee" class="p-2 border border-gray-300 rounded-md w-full" placeholder="Année de fabrication" required>
+                </div>
+
+                <!-- Cylindrée -->
+                <div class="mb-4 flex-1">
+                    <label for="cylindree" class="block  text-xl">Cylindrée</label>
+                    <input type="number" id="cylindree" name="cylindree" class="p-2 border border-gray-300 rounded-md w-full" placeholder="Cylindrée du moteur en cc" required>
+                </div>
+            </div>
+
+            <div class="flex flex-col lg:flex-row lg:gap-10">
+                       <!-- Pilotage -->
+            <div class="mb-4 flex-1">
+                <label for="pilotage" class="block  text-xl">Pilotage</label>
+                <select id="pilotage" name="pilotage" class="p-2 border border-gray-300 rounded-md w-full" required>
+                    <option value="Automatique">Automatique</option>
+                    <option value="Manuel">Manuel</option>
+                </select>
+            </div>
+
+            <!-- Transmission -->
+            <div class="mb-4 flex-1">
+                <label for="transmission" class="block  text-xl">Transmission</label>
+                <select id="transmission" name="transmission" class="p-2 border border-gray-300 rounded-md w-full" required>
+                    <option value="2WD">2WD</option>
+                    <option value="4WD">4WD</option>
+                </select>
+            </div>
+            </div>
+
+            <div class="flex flex-col lg:flex-row lg:gap-10">
+                            <!-- Places -->
+                <div class="mb-4 flex-1">
+                    <label for="places" class="block  text-xl">Nombre de places</label>
+                    <input type="number" id="places" name="places" class="p-2 border border-gray-300 rounded-md w-full" placeholder="Nombre de places" required>
+                </div>
+
+                <!-- Portes -->
+                <div class="mb-4 flex-1">
+                    <label for="portes" class="block  text-xl">Nombre de portes</label>
+                    <input type="number" id="portes" name="portes" class="p-2 border border-gray-300 rounded-md w-full" placeholder="Nombre de portes" required>
+                </div>
+            </div>
+
+            <div class="flex flex-col lg:flex-row lg:gap-10">
+
+                 <!-- Couleur -->
+            <div class="mb-4 flex-1">
+                <label for="couleur" class="block  text-xl">Couleur</label>
+                <input type="text" id="couleur" name="couleur" class="p-2 border border-gray-300 rounded-md w-full" placeholder="Couleur de la voiture" required>
+            </div>
+            <!-- Carburant -->
+            <div class="mb-4 flex-1">
+                <label for="carburant" class="block  text-xl">Carburant</label>
+                <select id="carburant" name="carburant" class="p-2 border border-gray-300 rounded-md w-full" required>
+                    <option value="Essence">Essence</option>
+                    <option value="Diesel">Diesel</option>
+                    <option value="Hybride">Hybride</option>
+                </select>
+            </div>
+            </div>
+
+            <div class="flex flex-col lg:flex-row lg:gap-10">
+
+                 <!-- Kilométrage -->
+            <div class="mb-4 flex-1">
+                <label for="kilometrage" class="block  text-xl">Kilométrage</label>
+                <input type="number" id="kilometrage" name="kilometrage" class="p-2 border border-gray-300 rounded-md w-full" placeholder="Kilométrage en km" required>
+            </div>
+
+            <!-- Prix -->
+            <div class="mb-4 flex-1">
+                <label for="prix" class="block  text-xl">Prix</label>
+                <input type="number" id="prix" name="prix" class="p-2 border border-gray-300 rounded-md w-full" placeholder="Prix de la voiture" required>
+            </div>
+
+            </div>
+
+           
+
+           
+
+            <!-- Equipements -->
+            <div class="mb-4">
+                <label for="equipements" class="block  text-xl">Équipements</label>
+                <div id="equipment-container" class="mb-4">
+                    <div class="flex items-center mb-4">
+                        <input type="text" name="equipement[]" class="p-2 border border-gray-300 rounded-md mr-2 w-full" placeholder="Nom de l'équipement">
+                        <button type="button" class="bg-red-400 text-white px-4 py-2 rounded-md" onclick="removeField(this)">Supprimer</button>
+                    </div>
+                </div>
+                <button type="button" onclick="addEquipmentField()" class="bg-blue-900 text-white px-4 py-2 rounded-md">Ajouter un équipement</button>
+            </div>
+
+            <!-- Images -->
+            <div class="mb-4">
+                <label for="images" class="block  text-xl">Images</label>
+                <div id="image-container" class="mb-4">
+                    <input type="file" name="images[]" accept="image/*" class="p-2 border border-gray-300 rounded-md w-full">
+                </div>
+                <button type="button" onclick="addImageField()" class="bg-blue-900 text-white px-4 py-2 rounded-md">Ajouter une image</button>
+            </div>
+
+            <!-- Envoyer -->
+            <div class="mt-10 flex justify-end">
+                <button type="submit" class="bg-blue-900 text-white px-10 py-3 rounded-md w-full lg:w-52">Envoyer</button>
+            </div>
+        </form>
+    </main>
+
+    <footer class=" w-full bg-gray-50 flex flex-wrap py-10 px-5 justify-center items-center mt-10">
+        <div class="w-[350px] p-10">
+            <h1 class="text-3xl pb-5 text-center lg:text-left">Hope Business <br>World <span class="text-blue-800 font-bold">LTD</span></h1>
+            <p class=" text-xl lg:text-2xl font-light space-x-4 lg:italic text-center lg:text-left">Nous mettons à votre disposition les meilleures offres, un service personnalisé et une expérience d’achat unique.</p>
+            <div class="flex justify-center lg:justify-start gap-3 mt-7">
+                <div class="size-12 rounded-full border-2 border-black flex justify-center items-center hover:text-blue-600 hover:border-blue-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-twitter size-6"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg>
+                </div>
+                <div class="size-12 rounded-full border-2 border-black flex justify-center items-center hover:text-blue-600 hover:border-blue-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-facebook size-6"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+                </div>
+                <div class="size-12 rounded-full border-2 border-black flex justify-center items-center hover:text-blue-600 hover:border-blue-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-instagram size-6"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+                </div>
+                <div class="size-12 rounded-full border-2 border-black flex justify-center items-center hover:text-blue-600 hover:border-blue-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-linkedin size-6"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+                </div>
+            </div>
+        
+        </div>
+        <div class="w-[350px] flex justify-center items-center">
+            <img class="w--36 " src="/assets/images/main/logo.png" alt="">
+        </div>
+        <div id="contact" class=" lg:pl-32 w-[350px] flex flex-col items-c justify-start gap-5 text-left lg:text-center mt-5 lg:mt-0">
+            <h1 class="text-3xl lg:text-2xl  lg:font-bold text-center lg:text-left">Contactez-nous</h1>
+            <ul class="flex flex-col items-c justify-start gap-2 text-xl font-light text-center lg:text-left">
+                <li> AV.P.E. Lumumba</li>
+                <li>Bukavu, BP. 285</li>
+                <li> DR Congo</li>
+                <li>Tel: +243 997 671 960</li>
+                <li>Tel: +243 822 633 356</li>
+            </ul>
+            
+           
+        </div>
+    </footer>
+
+    <section id="end" class="flex flex-col justify-center items-center bg-gray-100 h-25 w-full text-center">
+        <p>Copyright ©2025 <span class="font-bold">Hope Business World</span></p>
+        
+    </section>
+
+</body>
+
+</html>
