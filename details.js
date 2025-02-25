@@ -294,24 +294,24 @@ function ouvrirGmail() {
 
 function openWhatsapp() {
     // Numéro du destinataire (format international sans "+" ni espaces)
-    let phoneNumber = "243894097071"; // Exemple pour la RDC
-    // let phoneNumber = "243997671960"; // Exemple pour la RDC
+    // let phoneNumber = "243894097071"; // Exemple pour la RDC
+    let phoneNumber = "243997671960"; // Exemple pour la RDC
 
 
     let message = `*[HOPE BUSINESS WORLD] COMMANDE VOITURE*  
 
-🔹 *Marque* : ${voiture.marque}  
-🔹 *Modèle* : ${voiture.modele}  
-🔹 *Année* : ${voiture.annee}  
-🔹 *Cylindrée* : ${voiture.cylindree}  
-🔹 *Transmission* : ${voiture.transmission}  
-🔹 *Couleur* : ${voiture.couleur}  
-🔹 *Boîte de vitesses* : ${voiture.pilotage}  
-🔹 *Places* : ${voiture.places}  
-🔹 *Portes* : ${voiture.portes}  
-🔹 *Carburant* : ${voiture.carburant}  
-🔹 *Kilométrage* : ${voiture.kilometrage} km  
-🔹 *Prix* : ${voiture.prix} USD  
+*Marque* : ${voiture.marque}  
+*Modèle* : ${voiture.modele}  
+*Année* : ${voiture.annee}  
+*Cylindrée* : ${voiture.cylindree}  
+*Transmission* : ${voiture.transmission}  
+*Couleur* : ${voiture.couleur}  
+*Boîte de vitesses* : ${voiture.pilotage}  
+*Places* : ${voiture.places}  
+*Portes* : ${voiture.portes}  
+*Carburant* : ${voiture.carburant}  
+*Kilométrage* : ${voiture.kilometrage} km  
+*Prix* : ${voiture.prix} USD  
 
 *Équipements supplémentaires* : ${voiture.equipements.toString().replace(",", ", ")} 
 
